@@ -1,3 +1,2 @@
-source/run_data/**
-hhv2
-source/app/__pycache__
+.env
+run_data/*

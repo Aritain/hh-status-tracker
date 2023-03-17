@@ -1,4 +1,4 @@
-# Telegram bot for monitoring Haven&Hearth server and updates
+# Haven&Hearth tracker bot
 
 ## General info
 

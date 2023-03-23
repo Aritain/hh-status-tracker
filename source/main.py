@@ -5,6 +5,8 @@ from app.bot import Bot
 from app.handlers import (
     add_webhook,
     delete_webhook,
+    disable_notifications,
+    enable_notifications,
     get_help,
     mass_message,
     show_webhooks,
@@ -29,6 +31,8 @@ def main():
     bot.application.add_handler(CommandHandler("show_webhooks", show_webhooks))
     bot.application.add_handler(CommandHandler("delete_webhook", delete_webhook))
     bot.application.add_handler(CommandHandler("mass_message", mass_message))
+    bot.application.add_handler(CommandHandler("disable_notifications", disable_notifications))
+    bot.application.add_handler(CommandHandler("enable_notifications", enable_notifications))
 
     bot.application.run_polling()
 

@@ -2,6 +2,7 @@ from telegram import Update, error
 from telegram.ext import ContextTypes
 from app.bot import Bot
 from app.helpers import (
+    add_user,
     delete_discord_hook,
     delete_tg_user,
     get_tg_ids,
@@ -10,7 +11,6 @@ from app.helpers import (
 from app.settings import (
     DISCORD_WEBHOOK_FILE,
     get_bot_admin,
-    TG_ID_FILE,
     RUN_DATA_PATH
 )
 from app.polling import get_server_status
@@ -29,10 +29,8 @@ HELP_MESSAGE = (
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     tg_ids = get_tg_ids()
-    if str(update.message.from_user.id) in tg_ids:
-        return
-    with open(f'{RUN_DATA_PATH}/{TG_ID_FILE}', 'a') as tg_ids:
-        tg_ids.write(f'{update.message.from_user.id}\n')
+    if str(update.message.from_user.id) not in tg_ids:
+        add_user(update.message.from_user.id)
     await update.message.reply_text("Bot successfully started 😍")
 
 
@@ -114,3 +112,15 @@ async def mass_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def get_help(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(HELP_MESSAGE)
+
+
+async def disable_notifications(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    delete_tg_user(delete_candidate = update.message.from_user.id)
+    await update.message.reply_text("Telegram notifications successfully disabled 😭")
+
+
+async def enable_notifications(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    tg_ids = get_tg_ids()
+    if str(update.message.from_user.id) not in tg_ids:
+        add_user(update.message.from_user.id)
+    await update.message.reply_text("Telegram notifications successfully enabled 😍")

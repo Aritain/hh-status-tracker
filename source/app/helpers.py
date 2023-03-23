@@ -25,6 +25,7 @@ def get_tg_ids():
 
 
 def delete_tg_user(delete_candidate):
+    delete_candidate = str(delete_candidate)
     tg_ids = get_tg_ids()
     tg_ids = [id for id in tg_ids if id != delete_candidate]
     with open(f'{app.settings.RUN_DATA_PATH}/{app.settings.TG_ID_FILE}', 'w') as tg_id_file:
@@ -45,3 +46,8 @@ def delete_discord_hook(delete_candidate):
             else:
                 status = True
     return status
+
+
+def add_user(user_id):
+    with open(f'{app.settings.RUN_DATA_PATH}/{app.settings.TG_ID_FILE}', 'a') as tg_ids:
+        tg_ids.write(f'{user_id}\n')

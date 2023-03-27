@@ -1,3 +1,5 @@
+import asyncio
+
 from discord_webhook import DiscordWebhook
 from telegram import error
 from app.bot import Bot
@@ -24,38 +26,29 @@ def prepare_topic_msg(message_data):
     )
 
 
-async def message_tg(message):
-    bot = Bot()
-    tg_ids = get_tg_ids()
+async def message_tg(message, bot, user_id):
+    try:
+        await bot.send_message(chat_id = user_id, text = message)
+    except error.Forbidden:
+        app_logger.warn(f'Telegam user {user_id} blocked the bot, deleting...')
+        delete_tg_user(delete_candidate = user_id)
 
 
-    for user_id in tg_ids:
-        try:
-            await bot.send_message(chat_id = user_id, text = message)
-        except error.Forbidden:
-            app_logger.warn(f'tg user {user_id} blocked the bot, deleting...')
-            delete_tg_user(delete_candidate = user_id)
-
-
-async def message_discord(message):
-    discord_webhooks = get_webhooks()
-    bot = Bot()
-
-    for elem in discord_webhooks:
-        '''
-        Since webhook file has the following structure:
-        <telegram user id>;<discord webhook>
-        We need to extract webhooks only out of that
-        '''
-        url = elem.split(';')[1]
-        webhook = DiscordWebhook(
-            url=url, content=message)
-        result = webhook.execute()
-        if '40' in str(result):
-            app_logger.warn(f'Failed to send message for webhook {url}, deleting...')
-            delete_discord_hook(delete_candidate = elem)
-            delete_message = f'Your webhook {url} was deleted 😭'
-            await bot.send_message(chat_id = elem.split(';')[0], text = delete_message)
+async def message_discord(message, bot, discord_webhook):
+    '''
+    Since webhook file has the following structure:
+    <telegram user id>;<discord webhook>
+    We need to extract webhooks only out of that
+    '''
+    url = discord_webhook.split(';')[1]
+    webhook = DiscordWebhook(
+        url=url, content=message)
+    result = webhook.execute()
+    if '40' in str(result):
+        app_logger.warn(f'Failed to send message for webhook {url}, deleting...')
+        delete_discord_hook(delete_candidate = discord_webhook)
+        delete_message = f'Your webhook {url} got deleted 😭'
+        await bot.send_message(chat_id = discord_webhook.split(';')[0], text = delete_message)
 
 
 async def mass_message(message_data):
@@ -65,5 +58,14 @@ async def mass_message(message_data):
     else:
         message = prepare_topic_msg(message_data)
 
-    await message_tg(message)
-    await message_discord(message)
+    discord_webhooks = get_webhooks()
+    tg_ids = get_tg_ids()
+    bot = Bot()
+    messaging_tasks = []
+
+    for tg_id in tg_ids:
+        messaging_tasks.append(asyncio.create_task(message_tg(message, bot, tg_id)))
+    for discord_webhook in discord_webhooks:
+        messaging_tasks.append(asyncio.create_task(message_discord(message, bot, discord_webhook)))
+
+    await asyncio.gather(*messaging_tasks)

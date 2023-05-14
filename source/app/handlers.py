@@ -2,6 +2,7 @@ from telegram import Update, error
 from telegram.ext import ContextTypes
 from app.bot import Bot
 from app.helpers import (
+    app_logger,
     add_user,
     delete_discord_hook,
     delete_tg_user,

@@ -111,6 +111,8 @@ async def mass_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             except error.Forbidden:
                 app_logger.warn(f'tg user {user_id} blocked the bot, deleting...')
                 delete_tg_user(delete_candidate = user_id)
+            except error.BadRequest:
+                pass
 
 
 async def get_help(update: Update, context: ContextTypes.DEFAULT_TYPE):

@@ -5,9 +5,9 @@ import requests
 
 from bs4 import BeautifulSoup
 from datetime import datetime
-from app.helpers import app_logger
-from app.messaging import mass_message
-from app.settings import (
+from .helpers import app_logger
+from .messaging import mass_message
+from .settings import (
     ANNOUNCEMENTS_SUBFORUM,
     DISCORD_WEBHOOK_FILE,
     POLLING_INTERVAL,

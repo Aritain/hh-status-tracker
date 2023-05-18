@@ -1,7 +1,7 @@
-from telegram import Update, error
+from telegram import Update
 from telegram.ext import ContextTypes
-from app.bot import Bot
-from app.helpers import (
+from .bot import Bot
+from .helpers import (
     app_logger,
     add_user,
     delete_discord_hook,
@@ -9,12 +9,12 @@ from app.helpers import (
     get_tg_ids,
     get_webhooks
 )
-from app.settings import (
+from .settings import (
     DISCORD_WEBHOOK_FILE,
     get_bot_admin,
     RUN_DATA_PATH
 )
-from app.polling import get_server_status
+from .polling import get_server_status
 
 
 HELP_MESSAGE = (
@@ -106,13 +106,8 @@ async def mass_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         message = ' '.join(update.message.text.split()[1:])
 
         for user_id in tg_ids:
-            try:
-                await bot.send_message(chat_id = user_id, text = message)
-            except error.Forbidden:
-                app_logger.warn(f'tg user {user_id} blocked the bot, deleting...')
-                delete_tg_user(delete_candidate = user_id)
-            except error.BadRequest:
-                pass
+            await bot.send_message(chat_id = user_id, text = message)
+
 
 
 async def get_help(update: Update, context: ContextTypes.DEFAULT_TYPE):

@@ -1,16 +1,15 @@
 import asyncio
 
 from discord_webhook import DiscordWebhook
-from telegram import error
-from app.bot import Bot
-from app.helpers import (
+from .bot import Bot
+from .helpers import (
     app_logger,
     delete_discord_hook,
     delete_tg_user,
     get_tg_ids,
     get_webhooks
 )
-from app.settings import FORUM_LINK
+from .settings import FORUM_LINK
 
 
 def prepare_status_msg(message_data):
@@ -27,11 +26,7 @@ def prepare_topic_msg(message_data):
 
 
 async def message_tg(message, bot, user_id):
-    try:
-        await bot.send_message(chat_id = user_id, text = message)
-    except error.Forbidden:
-        app_logger.warn(f'Telegam user {user_id} blocked the bot, deleting...')
-        delete_tg_user(delete_candidate = user_id)
+    await bot.send_message(chat_id = user_id, text = message)
 
 
 async def message_discord(message, bot, discord_webhook):

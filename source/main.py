@@ -1,3 +1,4 @@
+import logging
 import threading
 
 from telegram.ext import CommandHandler
@@ -16,6 +17,8 @@ from app.handlers import (
 from app.helpers import app_logger
 from app.polling import hh_polling
 
+
+logging.getLogger("httpx").setLevel(logging.WARNING)
 
 def main():
     app_logger.info('Starting Bot & Polling...')

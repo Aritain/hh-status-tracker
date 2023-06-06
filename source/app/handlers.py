@@ -24,8 +24,8 @@ HELP_MESSAGE = (
     '/show_webhooks - show the list of discord webhooks you added\n'
     '/delete_webhook - deletes discord webhook, place webhook after command separated'
     ' by whitespace\n'
-    '/disable_notifications - disable Telegram notifications. Just in case you only want Discord ones'
-    '/enable_notifications - enable Telegram notificaitons (only if you disabled them previously)'
+    '/disable_notifications - disable Telegram notifications. Just in case you only want Discord ones\n'
+    '/enable_notifications - enable Telegram notificaitons (only if you disabled them previously)\n'
     '😘😘😘'
 )
 

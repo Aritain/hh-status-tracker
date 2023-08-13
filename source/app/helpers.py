@@ -13,8 +13,8 @@ app_logger = logging.getLogger('app_logger')
 
 
 def get_webhooks():
-    with open(f'{app.settings.RUN_DATA_PATH}/{app.settings.DISCORD_WEBHOOK_FILE}') as tg_id_file:
-        discord_webhooks = tg_id_file.read().splitlines()
+    with open(f'{app.settings.RUN_DATA_PATH}/{app.settings.DISCORD_WEBHOOK_FILE}') as webhooks_file:
+        discord_webhooks = webhooks_file.read().splitlines()
     return discord_webhooks
 
 

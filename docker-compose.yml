@@ -10,9 +10,6 @@ services:
     restart: always
     logging:
       driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "2"
     environment:
         TG_TOKEN: "${TG_TOKEN}"
         BOT_ADMIN: "${BOT_ADMIN}"

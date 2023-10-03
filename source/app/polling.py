@@ -21,7 +21,7 @@ from .settings import (
 def get_recent_topic():
     topics = []
     try:
-        response = requests.get(ANNOUNCEMENTS_SUBFORUM, timeout=10)
+        response = requests.get(ANNOUNCEMENTS_SUBFORUM, timeout=30)
     except Exception as requests_error:
         app_logger.warn(str(requests_error))
         app_logger.warn('Failed to fetch recent topic, retrying....')
@@ -63,7 +63,7 @@ def get_recent_topic():
 
 def get_server_status():
     try:
-        response = requests.get(TITLE_PAGE, timeout=10)
+        response = requests.get(TITLE_PAGE, timeout=30)
     except Exception as requests_error:
         app_logger.warn(str(requests_error))
         app_logger.warn('Failed to fetch server status, retrying....')
@@ -71,7 +71,12 @@ def get_server_status():
 
     # Scrape server status
     soup = BeautifulSoup(response.text, "html.parser")
-    server_status = soup.find(id = "status").find('h2').get_text()
+    try:
+        server_status = soup.find(id = "status").find('h2').get_text()
+    except Exception as parse_error:
+        app_logger.warn(str(requests_error))
+        app_logger.warn(f'Server Response - {response.text}')
+        server_status = None
 
     return server_status
 
@@ -117,8 +122,8 @@ def hh_polling():
         previous_topic_date = datetime.strptime(previous_topic_date, '%Y-%m-%d %H:%M:%S')
 
         # If the current server status differs from previous one - trigger messaging
-        if (("up" not in previous_server_status and "up" in server_status) or
-            ("up" not in server_status and "up" in previous_server_status)):
+        if (("The server is up" not in previous_server_status and "The server is up" in server_status) or
+            ("The server is up" not in server_status and "The server is up" in previous_server_status)):
             write_server_status(server_status, str(recent_topic_date))
             asyncio.run(mass_message(message_data = server_status))
 

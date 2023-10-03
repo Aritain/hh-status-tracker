@@ -1,3 +1,5 @@
+import asyncio
+
 from telegram import Update
 from telegram.ext import ContextTypes
 from .bot import Bot
@@ -124,3 +126,8 @@ async def enable_notifications(update: Update, context: ContextTypes.DEFAULT_TYP
     if str(update.message.from_user.id) not in tg_ids:
         add_user(update.message.from_user.id)
     await update.message.reply_text("Telegram notifications successfully enabled 😍")
+
+
+async def error_handler(update: object, context: ContextTypes.DEFAULT_TYPE):
+    app_logger.error(f"Exception while handling an update: {context.error}")
+    await asyncio.sleep(0)

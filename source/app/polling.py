@@ -74,7 +74,7 @@ def get_server_status():
     try:
         server_status = soup.find(id = "status").find('h2').get_text()
     except Exception as parse_error:
-        app_logger.warn(str(requests_error))
+        app_logger.warn(str(parse_error))
         app_logger.warn(f'Server Response - {response.text}')
         server_status = None
 

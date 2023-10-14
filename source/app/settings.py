@@ -12,7 +12,7 @@ TG_ID_FILE = "tg_users"
 DISCORD_WEBHOOK_FILE = "discord_webhooks"
 SERVER_STATUS_FILE = "server_status"
 
-POLLING_INTERVAL = 30
+POLLING_INTERVAL = 60
 
 
 def get_token():

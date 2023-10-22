@@ -54,7 +54,8 @@ def get_recent_topic():
         topic_date = topic_date[0].split("» ")[-1]
         topic_date = datetime.strptime(topic_date, "%a %b %d, %Y %I:%M %p")
         topics.append([topic_title, topic_date, topic_link])
-
+    if not topics:
+        return None
     # Iterate over dates and find the most recent one. Write topic name & date into new var
     recent_topic = [x for x in topics if x[1] == max([x[1] for x in topics])][0]
 

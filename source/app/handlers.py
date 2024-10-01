@@ -34,8 +34,8 @@ HELP_MESSAGE = (
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     tg_ids = get_tg_ids()
-    if str(update.message.from_user.id) not in tg_ids:
-        add_user(update.message.from_user.id)
+    if str(update.message.chat.id) not in tg_ids:
+        add_user(update.message.chat.id)
     await update.message.reply_text("Bot successfully started 😍")
 
 
@@ -117,14 +117,14 @@ async def get_help(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def disable_notifications(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    delete_tg_user(delete_candidate = update.message.from_user.id)
+    delete_tg_user(delete_candidate = update.message.chat.id)
     await update.message.reply_text("Telegram notifications successfully disabled 😭")
 
 
 async def enable_notifications(update: Update, context: ContextTypes.DEFAULT_TYPE):
     tg_ids = get_tg_ids()
-    if str(update.message.from_user.id) not in tg_ids:
-        add_user(update.message.from_user.id)
+    if str(update.message.chat.id) not in tg_ids:
+        add_user(update.message.chat.id)
     await update.message.reply_text("Telegram notifications successfully enabled 😍")
 
 

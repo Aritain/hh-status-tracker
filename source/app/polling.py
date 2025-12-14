@@ -17,6 +17,7 @@ from .settings import (
     RUN_DATA_PATH
 )
 
+UP_MESSAGE = "Both servers are up"
 
 def get_recent_topic():
     topics = []
@@ -123,8 +124,8 @@ def hh_polling():
         previous_topic_date = datetime.strptime(previous_topic_date, '%Y-%m-%d %H:%M:%S')
 
         # If the current server status differs from previous one - trigger messaging
-        if (("The server is up" not in previous_server_status and "The server is up" in server_status) or
-            ("The server is up" not in server_status and "The server is up" in previous_server_status)):
+        if ((UP_MESSAGE not in previous_server_status and UP_MESSAGE in server_status) or
+            (UP_MESSAGE not in server_status and UP_MESSAGE in previous_server_status)):
             write_server_status(server_status, str(recent_topic_date))
             asyncio.run(mass_message(message_data = server_status))
 

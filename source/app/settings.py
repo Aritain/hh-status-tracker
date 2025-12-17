@@ -11,6 +11,7 @@ RUN_DATA_PATH = "run_data"
 TG_ID_FILE = "tg_users"
 DISCORD_WEBHOOK_FILE = "discord_webhooks"
 SERVER_STATUS_FILE = "server_status"
+UP_MESSAGE = "Both servers are up"
 
 POLLING_INTERVAL = 60
 

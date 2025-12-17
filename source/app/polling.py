@@ -14,10 +14,9 @@ from .settings import (
     SERVER_STATUS_FILE,
     TITLE_PAGE,
     TG_ID_FILE,
-    RUN_DATA_PATH
+    RUN_DATA_PATH,
+    UP_MESSAGE
 )
-
-UP_MESSAGE = "Both servers are up"
 
 def get_recent_topic():
     topics = []
@@ -126,6 +125,7 @@ def hh_polling():
         # If the current server status differs from previous one - trigger messaging
         if ((UP_MESSAGE not in previous_server_status and UP_MESSAGE in server_status) or
             (UP_MESSAGE not in server_status and UP_MESSAGE in previous_server_status)):
+            app.helpers.app_logger.info(f'Server switched status, new status - {server_status}')
             write_server_status(server_status, str(recent_topic_date))
             asyncio.run(mass_message(message_data = server_status))
 

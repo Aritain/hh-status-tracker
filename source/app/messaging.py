@@ -9,11 +9,13 @@ from .helpers import (
     get_tg_ids,
     get_webhooks
 )
-from .settings import FORUM_LINK
-
+from .settings import (
+    FORUM_LINK,
+    UP_MESSAGE
+)
 
 def prepare_status_msg(message_data):
-    if "up" in message_data:
+    if message_data == UP_MESSAGE:
         return "The server went up 😍"
     return "The server went down 😱"
 
